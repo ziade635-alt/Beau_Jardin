@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>My Links</title>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #0f172a, #1e293b);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+    }
+
+    .container {
+        text-align: center;
+        background: #111827;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        width: 360px;
+        position: relative;
+    }
+
+    .profile-img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-bottom: 15px;
+        border: 3px solid #22c55e;
+        object-fit: cover;
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0;
+        border-radius: 6px;
+        border: none;
+        outline: none;
+    }
+
+    button {
+        width: 100%;
+        padding: 10px;
+        margin-top: 8px;
+        border: none;
+        border-radius: 6px;
+        background: #22c55e;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        background: #16a34a;
+    }
+
+    .link {
+        display: block;
+        text-decoration: none;
+        background: #22c55e;
+        color: white;
+        padding: 12px;
+        margin: 10px 0;
+        border-radius: 8px;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .link:hover {
+        background: #16a34a;
+        transform: scale(1.05);
+    }
+
+    .footer {
+        margin-top: 20px;
+        font-size: 12px;
+        color: #6b7280;
+    }
+
+    .admin-panel {
+        display: none;
+        margin-top: 15px;
+        border-top: 1px solid #374151;
+        padding-top: 15px;
+    }
+
+    .admin-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: auto;
+        padding: 5px 10px;
+        font-size: 12px;
+        background: #374151;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Admin button hidden for users -->
+    <button id="adminBtn" class="admin-btn" onclick="adminLogin()" style="display:none;">Admin</button>
+
+    <img id="profilePreview" class="profile-img" src="https://i.pravatar.cc/150" alt="profile">
+
+    <h2>Abdelrahman Ahmed</h2>
+    <p>Data Engineer</p>
+
+    <!-- Admin Panel (Visible only to you) -->
+    <div id="adminPanel" class="admin-panel">
+        <input type="file" id="profileUpload" accept="image/*">
+
+        <input type="text" id="linkName" placeholder="Link Name (Instagram, TikTok...)">
+        <input type="text" id="linkUrl" placeholder="https://...">
+        <button onclick="addLink()">Add Link</button>
+    </div>
+
+    <!-- Links Container (Visible to everyone) -->
+    <div id="linksContainer">
+        <a class="link" href="https://instagram.com" target="_blank">Instagram</a>
+        <a class="link" href="https://tiktok.com" target="_blank">TikTok</a>
+        <a class="link" href="https://linkedin.com" target="_blank">LinkedIn</a>
+        <a class="link" href="https://github.com" target="_blank">GitHub</a>
+    </div>
+
+    <div class="footer">© 2026 My Links</div>
+
+</div>
+
+<script>
+
+    const ADMIN_PASSWORD = "01144873329"; // change this password
+
+    // show admin button only if ?admin=true in URL
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("admin") === "true") {
+        document.getElementById("adminBtn").style.display = "block";
+    }
+
+    function adminLogin() {
+        const pass = prompt("Enter admin password");
+
+        if (pass === ADMIN_PASSWORD) {
+            document.getElementById("adminPanel").style.display = "block";
+            alert("Admin mode activated");
+        } else {
+            alert("Wrong password");
+        }
+    }
+
+    // Upload profile image
+    document.getElementById("profileUpload")?.addEventListener("change", function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById("profilePreview").src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Add new link
+    function addLink() {
+        const name = document.getElementById("linkName").value;
+        const url = document.getElementById("linkUrl").value;
+
+        if (name === "" || url === "") {
+            alert("Please enter link name and URL");
+            return;
+        }
+
+        const a = document.createElement("a");
+        a.className = "link";
+        a.href = url;
+        a.target = "_blank";
+        a.innerText = name;
+
+        document.getElementById("linksContainer").appendChild(a);
+
+        document.getElementById("linkName").value = "";
+        document.getElementById("linkUrl").value = "";
+    }
+
+</script>
+
+</body>
+</html>
